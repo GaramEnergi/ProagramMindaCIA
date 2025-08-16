@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIKMAT PROGRAM MINDA ALA C.I.A</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: white;
+      font-size: 12px; /* font lebih kecil */
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    #inputSection {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #00ffcc;
+      text-shadow: 0 0 8px #00ffcc;
+    }
+    textarea {
+      width: 90%;
+      height: 200px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      background: #111;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #00ffcc;
+      border: none;
+      border-radius: 5px;
+      color: black;
+      font-weight: bold;
+    }
+    #note {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    #display {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: none;
+    }
+    .line {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      animation: blink 0.05s infinite alternate;
+      white-space: nowrap;
+    }
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="inputSection">
+    <h1>CIKMAT PROGRAM MINDA ALA C.I.A</h1>
+    <p style="color: red; font-weight: bold;">
+      ⚠️ Amaran: Jangan guna jika anda ada masalah sawan / epilepsi
+    </p>
+    <textarea id="affirmations" placeholder="Tulis setiap affirmation pada baris baru..."></textarea>
+    <button onclick="startFlash()">RUN</button>
+    <div id="note">👉 SILA PANDANG SCREEN SELAMA 1/2 JAM SELEPAS KLIK RUN</div>
+  </div>
+  
+  <div id="display"></div>
+
+  <script>
+    // Papar amaran awal bila user buka
+    window.onload = function() {
+      alert("⚠️ Amaran Penting:\n\nAplikasi ini ada kesan flashing laju.\nJangan guna jika anda ada sawan/epilepsi.");
+    };
+
+    function startFlash() {
+      let text = document.getElementById("affirmations").value.trim();
+      if (!text) return alert("Sila masukkan affirmation dulu!");
+      
+      let affirmations = text.split("\n").filter(line => line.trim() !== "");
+      let display = document.getElementById("display");
+      document.getElementById("inputSection").style.display = "none";
+      display.style.display = "block";
+      
+      // auto fullscreen
+      if (display.requestFullscreen) {
+        display.requestFullscreen();
+      } else if (display.webkitRequestFullscreen) {
+        display.webkitRequestFullscreen();
+      }
+      
+      let y = window.innerHeight;
+      setInterval(() => {
+        let line = document.createElement("div");
+        line.className = "line";
+        line.textContent = affirmations[Math.floor(Math.random() * affirmations.length)];
+        line.style.top = y + "px";
+        display.appendChild(line);
+        
+        let pos = y;
+        let speed = 30; // laju
+        let move = setInterval(() => {
+          pos -= speed;
+          line.style.top = pos + "px";
+          if (pos < -30) {
+            clearInterval(move);
+            line.remove();
+          }
+        }, 5); 
+      }, 30);
+    }
+  </script>
+</body>
+</html>
